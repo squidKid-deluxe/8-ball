@@ -1,5 +1,5 @@
 """
-Script that creates an animated, ASCII-art magic 8-Ball
+Script that creates an ASCII-art magic 8-Ball
 """
 # import nessicary module
 from random import choice

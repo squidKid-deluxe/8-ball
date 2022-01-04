@@ -1,12 +1,10 @@
 """
 Script that creates an ASCII-art magic 8-Ball
 """
-# import nessicary module
+# Import random module, for choosing the 8-Ball's answer.
 from random import choice
 
-# Clear the screen
-print("\033c")
-# Initalize all of the possible answers
+# Initialize all of the possible answers
 ANSWERS = [
     "It is certain.",
     "It is decidedly so.",
@@ -29,19 +27,17 @@ ANSWERS = [
     "Outlook not so good.",
     "Very doubtful.",
 ]
-# Get the ASCII-art form ball.txt
-HANDLE = open("ball.txt", "r")
-BALL = HANDLE.read()
-HANDLE.close()
 
 
 def main():
     """
-    main process
+    Main process
     """
+    # Clear the screen
+    print("\033c")
     # Ask user for question
     input("Enter a Yes or No question:  ")
-    # initalize varible
+    # initialize variable
     words = []
     # choose a random answer
     answer = choice(ANSWERS)
@@ -52,19 +48,24 @@ def main():
         try:
             # Add the current word to the list, colored and padded with $s for later formatting
             words.append("\033[48;2;0;0;150m" + str(answer[i].ljust(11, "$")))
-        # Unless there are no more entries in the answer list, in wich case add a 'blank' string
+        # Unless there are no more entries in the answer list, in which case add a 'blank' string
         except IndexError:
             words.append("\033[48;2;0;0;150m$$$$$$$$$$$")
 
     def fstr(template, **kwargs):
         """
-        Definition for using an f-string format for a varible, taken from
+        Definition for using an f-string format for a variable, taken from
         https://stackoverflow.com/questions/54351740/how-can-i-use-f-string-with-a-variable-not-with-a-string-literal
         """
         return eval(f"f'{template}'", kwargs)
 
-    # Use the f-string definition to format the 8-Ball ASCII-art
-    ball = fstr(BALL, words=words)
+    # Get the ASCII-art form ball.txt
+    with open("ball.txt", "r") as handle:
+        ball = handle.read()
+        handle.close()
+
+    # Use the f-string definition to add the answer to the 8-Ball ASCII-art
+    ball = fstr(ball, words=words)
 
     def str_to_matrix(string):
         """
@@ -79,8 +80,7 @@ def main():
                 inner_list = []
         return final_list
 
-    # Apply the definition to the fromatted string
-    # (Def keeps formatting)
+    # Create a matrix of chars from the string
     ball = str_to_matrix(ball)
     # Clear the screen again
     print("\033c")
